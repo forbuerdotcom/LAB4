@@ -154,15 +154,15 @@
         </Border>
 
         <!-- Область результатов (общая для всех вкладок) -->
-        <DataGrid x:Name="TruthTableDataGrid"
-                  Canvas.Left="410" Canvas.Top="90"
-                  Width="380" Height="300"
-                  AutoGenerateColumns="True"
-                  HeadersVisibility="Column"
-                  IsReadOnly="True"
-                  Background="White"
-                  BorderThickness="0"
-                  ScrollViewer.VerticalScrollBarVisibility="Auto">
+      <DataGrid x:Name="TruthTableDataGrid"
+                Canvas.Left="410" Canvas.Top="90"
+                Width="380" Height="300"
+                AutoGenerateColumns="False"
+                HeadersVisibility="Column"
+                IsReadOnly="True"
+                Background="White"
+                BorderThickness="0"
+                ScrollViewer.VerticalScrollBarVisibility="Auto">
             <DataGrid.CellStyle>
                 <Style TargetType="DataGridCell">
                     <Setter Property="BorderBrush" Value="#E0E0E0"/>

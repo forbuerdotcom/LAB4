@@ -1,13 +1,13 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "D:\\Lab4\\",
+  "WorkspaceRootPath": "C:\\Users\\\u041D\u0435\u0439\u0442\u0440\u043E\u043D\\Documents\\GitHub\\LAB4\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{97C81DA1-2402-4B56-8E30-16F684D85E3F}|Lab4\\Lab4.csproj|d:\\lab4\\lab4\\mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{97C81DA1-2402-4B56-8E30-16F684D85E3F}|Lab4\\Lab4.csproj|c:\\users\\\u043D\u0435\u0439\u0442\u0440\u043E\u043D\\documents\\github\\lab4\\lab4\\mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{97C81DA1-2402-4B56-8E30-16F684D85E3F}|Lab4\\Lab4.csproj|solutionrelative:lab4\\mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{97C81DA1-2402-4B56-8E30-16F684D85E3F}|Lab4\\Lab4.csproj|d:\\lab4\\lab4\\mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "AbsoluteMoniker": "D:0:0:{97C81DA1-2402-4B56-8E30-16F684D85E3F}|Lab4\\Lab4.csproj|c:\\users\\\u043D\u0435\u0439\u0442\u0440\u043E\u043D\\documents\\github\\lab4\\lab4\\mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
       "RelativeMoniker": "D:0:0:{97C81DA1-2402-4B56-8E30-16F684D85E3F}|Lab4\\Lab4.csproj|solutionrelative:lab4\\mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
     }
   ],
@@ -18,19 +18,31 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 2,
+          "SelectedChildIndex": 5,
           "Children": [
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{eefa5220-e298-11d0-8f78-00a0c9110057}"
             },
             {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{aa2115a1-9712-457b-9047-dbb71ca2cdd2}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:128:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:129:0:{75188d03-9892-4ae2-abf1-207126247ce5}"
+            },
+            {
               "$type": "Document",
               "DocumentIndex": 1,
               "Title": "MainWindow.xaml",
-              "DocumentMoniker": "D:\\Lab4\\Lab4\\MainWindow.xaml",
+              "DocumentMoniker": "C:\\Users\\\u041D\u0435\u0439\u0442\u0440\u043E\u043D\\Documents\\GitHub\\LAB4\\Lab4\\MainWindow.xaml",
               "RelativeDocumentMoniker": "Lab4\\MainWindow.xaml",
-              "ToolTip": "D:\\Lab4\\Lab4\\MainWindow.xaml",
+              "ToolTip": "C:\\Users\\\u041D\u0435\u0439\u0442\u0440\u043E\u043D\\Documents\\GitHub\\LAB4\\Lab4\\MainWindow.xaml",
               "RelativeToolTip": "Lab4\\MainWindow.xaml",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
               "WhenOpened": "2025-11-19T09:38:03.429Z",
@@ -40,14 +52,48 @@
               "$type": "Document",
               "DocumentIndex": 0,
               "Title": "MainWindow.xaml.cs",
-              "DocumentMoniker": "D:\\Lab4\\Lab4\\MainWindow.xaml.cs",
+              "DocumentMoniker": "C:\\Users\\\u041D\u0435\u0439\u0442\u0440\u043E\u043D\\Documents\\GitHub\\LAB4\\Lab4\\MainWindow.xaml.cs",
               "RelativeDocumentMoniker": "Lab4\\MainWindow.xaml.cs",
-              "ToolTip": "D:\\Lab4\\Lab4\\MainWindow.xaml.cs*",
-              "RelativeToolTip": "Lab4\\MainWindow.xaml.cs*",
-              "ViewState": "AgIAAPkCAAAAAAAAAAAAABsDAAABAAAAAAAAAA==",
+              "ToolTip": "C:\\Users\\\u041D\u0435\u0439\u0442\u0440\u043E\u043D\\Documents\\GitHub\\LAB4\\Lab4\\MainWindow.xaml.cs",
+              "RelativeToolTip": "Lab4\\MainWindow.xaml.cs",
+              "ViewState": "AgIAAG8AAAAAAAAAAAAAAIQAAAA5AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-11-19T09:37:19.652Z",
               "EditorCaption": ""
+            }
+          ]
+        },
+        {
+          "DockedWidth": 193,
+          "SelectedChildIndex": -1,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{3ae79031-e1bc-11d0-8f78-00a0c9110057}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{34e76e81-ee4a-11d0-ae2e-00a0c90fffc3}"
+            }
+          ]
+        },
+        {
+          "DockedWidth": 204,
+          "SelectedChildIndex": -1,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{d78612c7-9962-4b83-95d9-268046dad23a}"
+            }
+          ]
+        },
+        {
+          "DockedWidth": 1062,
+          "SelectedChildIndex": -1,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{b1e99781-ab81-11d0-b683-00aa00a3ee26}"
             }
           ]
         }
