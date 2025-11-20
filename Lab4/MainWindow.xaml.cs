@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
+using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Controls;
 
 namespace Lab4
 {
@@ -41,46 +43,86 @@ namespace Lab4
 
         private void ActivateTab(System.Windows.Controls.Border activeTab, System.Windows.Controls.Border activeContent)
         {
-            // Сбрасываем все табы к неактивному состоянию
             ResetAllTabs();
 
-            // Устанавливаем активный таб
             activeTab.Background = new SolidColorBrush(Color.FromRgb(0xCA, 0x90, 0x8E));
             var textBlock = (System.Windows.Controls.TextBlock)activeTab.Child;
             textBlock.Foreground = Brushes.White;
             textBlock.FontWeight = FontWeights.SemiBold;
 
-            // Скрываем весь контент
             Tab1Content.Visibility = Visibility.Collapsed;
             Tab2Content.Visibility = Visibility.Collapsed;
             Tab3Content.Visibility = Visibility.Collapsed;
 
-            // Показываем активный контент
             activeContent.Visibility = Visibility.Visible;
         }
 
         private void ResetAllTabs()
         {
-            // Сбрасываем таб 1
-            Tab1.Background = Brushes.Transparent;
-            var textBlock1 = (System.Windows.Controls.TextBlock)Tab1.Child;
-            textBlock1.Foreground = new SolidColorBrush(Color.FromRgb(0x66, 0x66, 0x66));
-            textBlock1.FontWeight = FontWeights.Normal;
-
-            // Сбрасываем таб 2
-            Tab2.Background = Brushes.Transparent;
-            var textBlock2 = (System.Windows.Controls.TextBlock)Tab2.Child;
-            textBlock2.Foreground = new SolidColorBrush(Color.FromRgb(0x66, 0x66, 0x66));
-            textBlock2.FontWeight = FontWeights.Normal;
-
-            // Сбрасываем таб 3
-            Tab3.Background = Brushes.Transparent;
-            var textBlock3 = (System.Windows.Controls.TextBlock)Tab3.Child;
-            textBlock3.Foreground = new SolidColorBrush(Color.FromRgb(0x66, 0x66, 0x66));
-            textBlock3.FontWeight = FontWeights.Normal;
+            var tabs = new[] { Tab1, Tab2, Tab3 };
+            foreach (var tab in tabs)
+            {
+                tab.Background = Brushes.Transparent;
+                var textBlock = (System.Windows.Controls.TextBlock)tab.Child;
+                textBlock.Foreground = new SolidColorBrush(Color.FromRgb(0x66, 0x66, 0x66));
+                textBlock.FontWeight = FontWeights.Normal;
+            }
         }
 
-        // Обработчик кнопки для вкладки "По номеру"
+        private void SetupDataGridColumns(List<string> variableNames)
+        {
+            // Очищаем предыдущие колонки
+            TruthTableDataGrid.Columns.Clear();
+
+            // Создаем стиль для заголовков
+            var headerStyle = new Style(typeof(DataGridColumnHeader))
+            {
+                Setters = {
+                    new Setter(DataGridColumnHeader.BackgroundProperty, new SolidColorBrush(Color.FromRgb(0xF1, 0xC4, 0xBE))),
+                    new Setter(DataGridColumnHeader.ForegroundProperty, Brushes.Black),
+                    new Setter(DataGridColumnHeader.FontWeightProperty, FontWeights.Bold),
+                    new Setter(DataGridColumnHeader.PaddingProperty, new Thickness(8))
+                }
+            };
+
+            // Создаем стиль для ячеек
+            var cellStyle = new Style(typeof(DataGridCell))
+            {
+                Setters = {
+                    new Setter(DataGridCell.BorderBrushProperty, new SolidColorBrush(Color.FromRgb(0xE0, 0xE0, 0xE0))),
+                    new Setter(DataGridCell.BorderThicknessProperty, new Thickness(0, 0, 1, 1)),
+                    new Setter(DataGridCell.PaddingProperty, new Thickness(8)),
+                    new Setter(DataGridCell.ForegroundProperty, Brushes.Black)
+                }
+            };
+
+            // Применяем стили
+            TruthTableDataGrid.ColumnHeaderStyle = headerStyle;
+            TruthTableDataGrid.CellStyle = cellStyle;
+
+            // Создаем колонку для каждой переменной
+            foreach (var varName in variableNames)
+            {
+                // Преобразуем "x1" в "X1" для привязки к свойству класса TruthTableRow
+                string bindingPath = char.ToUpper(varName[0]) + varName.Substring(1);
+
+                var column = new DataGridTextColumn
+                {
+                    Header = varName, // Заголовок будет "x1"
+                    Binding = new Binding(bindingPath) // Привязка к свойству "X1"
+                };
+                TruthTableDataGrid.Columns.Add(column);
+            }
+
+            // Создаем колонку для результата
+            var resultColumn = new DataGridTextColumn
+            {
+                Header = "Result",
+                Binding = new Binding("Result")
+            };
+            TruthTableDataGrid.Columns.Add(resultColumn);
+        }
+
         private void TableTrueFalseButton_Click(object sender, RoutedEventArgs e)
         {
             try
@@ -88,14 +130,12 @@ namespace Lab4
                 int numVariables = int.Parse(NumCountTextBox.Text);
                 int functionNumber = int.Parse(FunctionName.Text);
 
-                // Проверяем, что количество переменных в разумных пределах
-                if (numVariables < 1 || numVariables > 10)
+                if (numVariables < 1 || numVariables > 20)
                 {
-                    MessageBox.Show("Количество переменных должно быть от 1 до 10");
+                    MessageBox.Show("Количество переменных должно быть от 1 до 20");
                     return;
                 }
 
-                // Проверяем, что номер функции в допустимых пределах
                 int maxFunctionNumber = (int)Math.Pow(2, Math.Pow(2, numVariables));
                 if (functionNumber < 0 || functionNumber >= maxFunctionNumber)
                 {
@@ -103,14 +143,15 @@ namespace Lab4
                     return;
                 }
 
-                // Создаем таблицу истинности по номеру функции
-                var tableData = GenerateTruthTableByNumber(numVariables, functionNumber);
+                var variableNames = Enumerable.Range(1, numVariables).Select(i => $"x{i}").ToList();
 
-                // Заполняем DataGrid
+                // Вызываем новый метод для настройки колонок
+                SetupDataGridColumns(variableNames);
+
+                var tableData = GenerateTruthTableByNumber(numVariables, functionNumber, variableNames);
+
                 TruthTableDataGrid.ItemsSource = tableData;
-
-                // Генерируем и выводим СДНФ и СКНФ
-                GenerateDNFAndKNF(tableData, numVariables);
+                GenerateDNFAndKNF(tableData, variableNames);
             }
             catch (FormatException)
             {
@@ -122,128 +163,61 @@ namespace Lab4
             }
         }
 
-        // Генерация таблицы истинности по номеру функции
-        private List<TruthTableRow> GenerateTruthTableByNumber(int numVariables, int functionNumber)
+        private List<TruthTableRow> GenerateTruthTableByNumber(int numVariables, int functionNumber, List<string> variableNames)
         {
             var tableData = new List<TruthTableRow>();
             int numRows = (int)Math.Pow(2, numVariables);
 
-            // Преобразуем номер функции в двоичную последовательность
             string binaryFunction = Convert.ToString(functionNumber, 2).PadLeft(numRows, '0');
 
             for (int i = 0; i < numRows; i++)
             {
                 var row = new TruthTableRow();
-
-                // Заполняем значения переменных
                 for (int j = 0; j < numVariables; j++)
                 {
                     int bitValue = (i >> (numVariables - 1 - j)) & 1;
-
-                    switch (j)
-                    {
-                        case 0: row.X1 = bitValue; break;
-                        case 1: row.X2 = bitValue; break;
-                        case 2: row.X3 = bitValue; break;
-                        case 3: row.X4 = bitValue; break;
-                        case 4: row.X5 = bitValue; break;
-                        case 5: row.X6 = bitValue; break;
-                        case 6: row.X7 = bitValue; break;
-                        case 7: row.X8 = bitValue; break;
-                        case 8: row.X9 = bitValue; break;
-                        case 9: row.X10 = bitValue; break;
-                    }
+                    row.SetValue(variableNames[j], bitValue);
                 }
-
-                // Устанавливаем результат функции
                 row.Result = int.Parse(binaryFunction[i].ToString());
-
                 tableData.Add(row);
             }
 
             return tableData;
         }
 
-        // Генерация СДНФ и СКНФ
-        private void GenerateDNFAndKNF(List<TruthTableRow> tableData, int numVariables)
+        private void GenerateDNFAndKNF(List<TruthTableRow> tableData, List<string> variables)
         {
             var dnfTerms = new List<string>();
             var knfTerms = new List<string>();
 
             foreach (var row in tableData)
             {
-                // Для СДНФ (результат = 1)
                 if (row.Result == 1)
                 {
                     var term = new List<string>();
-
-                    for (int i = 0; i < numVariables; i++)
+                    foreach (var varName in variables)
                     {
-                        int value = 0;
-                        string varName = $"x{i + 1}";
-
-                        switch (i)
-                        {
-                            case 0: value = row.X1; break;
-                            case 1: value = row.X2; break;
-                            case 2: value = row.X3; break;
-                            case 3: value = row.X4; break;
-                            case 4: value = row.X5; break;
-                            case 5: value = row.X6; break;
-                            case 6: value = row.X7; break;
-                            case 7: value = row.X8; break;
-                            case 8: value = row.X9; break;
-                            case 9: value = row.X10; break;
-                        }
-
-                        if (value == 0)
-                            term.Add($"!{varName}");
-                        else
-                            term.Add(varName);
+                        int value = row.GetValue(varName);
+                        term.Add(value == 0 ? $"!{varName}" : varName);
                     }
-
                     dnfTerms.Add($"({string.Join(" & ", term)})");
                 }
 
-                // Для СКНФ (результат = 0)
                 if (row.Result == 0)
                 {
                     var term = new List<string>();
-
-                    for (int i = 0; i < numVariables; i++)
+                    foreach (var varName in variables)
                     {
-                        int value = 0;
-                        string varName = $"x{i + 1}";
-
-                        switch (i)
-                        {
-                            case 0: value = row.X1; break;
-                            case 1: value = row.X2; break;
-                            case 2: value = row.X3; break;
-                            case 3: value = row.X4; break;
-                            case 4: value = row.X5; break;
-                            case 5: value = row.X6; break;
-                            case 6: value = row.X7; break;
-                            case 7: value = row.X8; break;
-                            case 8: value = row.X9; break;
-                            case 9: value = row.X10; break;
-                        }
-
-                        if (value == 1)
-                            term.Add($"!{varName}");
-                        else
-                            term.Add(varName);
+                        int value = row.GetValue(varName);
+                        term.Add(value == 1 ? $"!{varName}" : varName);
                     }
-
                     knfTerms.Add($"({string.Join(" | ", term)})");
                 }
             }
 
-            // Выводим результаты в текстовые поля (предполагается, что они добавлены в XAML)
             DNFResultText.Text = dnfTerms.Count > 0 ? string.Join(" | ", dnfTerms) : "0";
             KNFResultText.Text = knfTerms.Count > 0 ? string.Join(" & ", knfTerms) : "1";
 
-            // Подсчитываем "стоимость" формул
             int dnfLiterals = dnfTerms.Sum(t => t.Count(c => c == 'x') + t.Count(c => c == '!'));
             int knfLiterals = knfTerms.Sum(t => t.Count(c => c == 'x') + t.Count(c => c == '!'));
 
@@ -251,66 +225,25 @@ namespace Lab4
             KNFStatsText.Text = $"Литералов: {knfLiterals}, Дизъюнкций: {knfTerms.Count}";
         }
 
-        // Обработчик кнопки для вкладки "По формуле"
         private void ParseFormulaButton_Click(object sender, RoutedEventArgs e)
         {
             try
             {
                 string formula = FormulaTextBox.Text.Trim();
-
-                // Получаем все переменные из формулы
                 var variables = GetVariablesFromFormula(formula);
-                int numVariables = variables.Count;
 
-                if (numVariables == 0)
+                if (variables.Count == 0)
                 {
                     MessageBox.Show("В формуле нет переменных");
                     return;
                 }
 
-                // Создаем таблицу истинности
-                var tableData = new List<TruthTableRow>();
-                int numRows = (int)Math.Pow(2, numVariables);
+                // Вызываем новый метод для настройки колонок
+                SetupDataGridColumns(variables);
 
-                // Лексический анализ и синтаксический анализ формулы
-                var rpn = ConvertToRPN(formula);
-
-                for (int i = 0; i < numRows; i++)
-                {
-                    var row = new TruthTableRow();
-                    var variableValues = new Dictionary<string, int>();
-
-                    // Заполняем значения переменных
-                    for (int j = 0; j < numVariables; j++)
-                    {
-                        int bitValue = (i >> (numVariables - 1 - j)) & 1;
-                        string varName = variables[j];
-                        variableValues[varName] = bitValue;
-
-                        // Заполняем соответствующие поля в строке таблицы
-                        if (varName == "x1") row.X1 = bitValue;
-                        else if (varName == "x2") row.X2 = bitValue;
-                        else if (varName == "x3") row.X3 = bitValue;
-                        else if (varName == "x4") row.X4 = bitValue;
-                        else if (varName == "x5") row.X5 = bitValue;
-                        else if (varName == "x6") row.X6 = bitValue;
-                        else if (varName == "x7") row.X7 = bitValue;
-                        else if (varName == "x8") row.X8 = bitValue;
-                        else if (varName == "x9") row.X9 = bitValue;
-                        else if (varName == "x10") row.X10 = bitValue;
-                    }
-
-                    // Вычисляем значение формулы для текущего набора переменных
-                    row.Result = EvaluateRPN(rpn, variableValues);
-
-                    tableData.Add(row);
-                }
-
-                // Заполняем DataGrid
+                var tableData = GenerateTruthTableByFormula(formula, variables);
                 TruthTableDataGrid.ItemsSource = tableData;
-
-                // Генерируем и выводим СДНФ и СКНФ
-                GenerateDNFAndKNF(tableData, numVariables);
+                GenerateDNFAndKNF(tableData, variables);
             }
             catch (Exception ex)
             {
@@ -318,34 +251,28 @@ namespace Lab4
             }
         }
 
-        // Получение всех переменных из формулы
         private List<string> GetVariablesFromFormula(string formula)
         {
             var variables = new HashSet<string>();
-
             for (int i = 0; i < formula.Length; i++)
             {
                 if (formula[i] == 'x' && i + 1 < formula.Length && char.IsDigit(formula[i + 1]))
                 {
                     string varName = "x";
                     i++;
-
                     while (i < formula.Length && char.IsDigit(formula[i]))
                     {
                         varName += formula[i];
                         i++;
                     }
-
-                    i--; // Возвращаемся на один символ назад, так как цикл for увеличит i
-
+                    i--;
                     variables.Add(varName);
                 }
             }
-
             return variables.OrderBy(v => int.Parse(v.Substring(1))).ToList();
         }
 
-        // Преобразование формулы в обратную польскую запись (RPN)
+        // ИСПРАВЛЕННЫЙ МЕТОД
         private List<string> ConvertToRPN(string formula)
         {
             var tokens = Tokenize(formula);
@@ -372,60 +299,12 @@ namespace Lab4
                     if (operators.Count == 0)
                         throw new Exception("Несогласованные скобки в формуле");
 
-                    operators.Pop(); // Удаляем "(" из стека
+                    operators.Pop();
                 }
                 else // Оператор
                 {
-                    // Заменяем небазисные операции на базисные
-                    if (token == "->")
-                    {
-                        // A -> B эквивалентно !A | B
-                        operators.Push(")");
-                        operators.Push("B");
-                        operators.Push("|");
-                        operators.Push("!");
-                        operators.Push("A");
-                        operators.Push("(");
-                        continue;
-                    }
-                    else if (token == "=")
-                    {
-                        // A = B эквивалентно (A & B) | (!A & !B)
-                        operators.Push(")");
-                        operators.Push(")");
-                        operators.Push("B");
-                        operators.Push("!");
-                        operators.Push("&");
-                        operators.Push("A");
-                        operators.Push("!");
-                        operators.Push("(");
-                        operators.Push("|");
-                        operators.Push("B");
-                        operators.Push("&");
-                        operators.Push("A");
-                        operators.Push("(");
-                        continue;
-                    }
-                    else if (token == "^")
-                    {
-                        // A ^ B эквивалентно (A & !B) | (!A & B)
-                        operators.Push(")");
-                        operators.Push(")");
-                        operators.Push("B");
-                        operators.Push("&");
-                        operators.Push("A");
-                        operators.Push("!");
-                        operators.Push("(");
-                        operators.Push("|");
-                        operators.Push("B");
-                        operators.Push("!");
-                        operators.Push("&");
-                        operators.Push("A");
-                        operators.Push("(");
-                        continue;
-                    }
-
-                    while (operators.Count > 0 && GetOperatorPriority(operators.Peek()) >= GetOperatorPriority(token))
+                    // Стандартная логика алгоритма сортировочной станции
+                    while (operators.Count > 0 && operators.Peek() != "(" && GetOperatorPriority(operators.Peek()) >= GetOperatorPriority(token))
                     {
                         output.Add(operators.Pop());
                     }
@@ -446,75 +325,33 @@ namespace Lab4
             return output;
         }
 
-        // Лексический анализ формулы
         private List<string> Tokenize(string formula)
         {
             var tokens = new List<string>();
             int i = 0;
-
             while (i < formula.Length)
             {
                 char c = formula[i];
-
-                if (char.IsWhiteSpace(c))
-                {
-                    i++;
-                    continue;
-                }
-
-                if (c == '(' || c == ')')
+                if (char.IsWhiteSpace(c)) { i++; continue; }
+                if (c == '(' || c == ')' || c == '!' || c == '&' || c == '|' || c == '^' || c == '=')
                 {
                     tokens.Add(c.ToString());
                     i++;
                 }
-                else if (c == '!')
+                else if (c == '-' && i + 1 < formula.Length && formula[i + 1] == '>')
                 {
-                    tokens.Add("!");
-                    i++;
-                }
-                else if (c == '&')
-                {
-                    tokens.Add("&");
-                    i++;
-                }
-                else if (c == '|')
-                {
-                    tokens.Add("|");
-                    i++;
-                }
-                else if (c == '^')
-                {
-                    tokens.Add("^");
-                    i++;
-                }
-                else if (c == '-')
-                {
-                    if (i + 1 < formula.Length && formula[i + 1] == '>')
-                    {
-                        tokens.Add("->");
-                        i += 2;
-                    }
-                    else
-                    {
-                        throw new Exception($"Неожиданный символ '-' в позиции {i}");
-                    }
-                }
-                else if (c == '=')
-                {
-                    tokens.Add("=");
-                    i++;
+                    tokens.Add("->");
+                    i += 2;
                 }
                 else if (c == 'x')
                 {
                     string varName = "x";
                     i++;
-
                     while (i < formula.Length && char.IsDigit(formula[i]))
                     {
                         varName += formula[i];
                         i++;
                     }
-
                     tokens.Add(varName);
                 }
                 else
@@ -522,17 +359,11 @@ namespace Lab4
                     throw new Exception($"Неожиданный символ '{c}' в позиции {i}");
                 }
             }
-
             return tokens;
         }
 
-        // Проверка, является ли токен переменной
-        private bool IsVariable(string token)
-        {
-            return token.StartsWith("x") && token.Length > 1 && token.Substring(1).All(char.IsDigit);
-        }
+        private bool IsVariable(string token) => token.StartsWith("x") && token.Length > 1 && token.Substring(1).All(char.IsDigit);
 
-        // Получение приоритета оператора
         private int GetOperatorPriority(string op)
         {
             switch (op)
@@ -540,78 +371,40 @@ namespace Lab4
                 case "!": return 4;
                 case "&": return 3;
                 case "|": return 2;
+                case "^": return 2;
                 case "->": return 1;
                 case "=": return 1;
-                case "^": return 2;
                 default: return 0;
             }
         }
 
-        // Вычисление выражения в RPN
         private int EvaluateRPN(List<string> rpn, Dictionary<string, int> variableValues)
         {
             var stack = new Stack<int>();
-
             foreach (var token in rpn)
             {
                 if (IsVariable(token))
                 {
                     stack.Push(variableValues[token]);
                 }
-                else if (token == "!")
-                {
-                    if (stack.Count < 1) throw new Exception("Недостаточно операндов для операции !");
-                    int a = stack.Pop();
-                    stack.Push(NOT(a));
-                }
-                else if (token == "&")
-                {
-                    if (stack.Count < 2) throw new Exception("Недостаточно операндов для операции &");
-                    int b = stack.Pop();
-                    int a = stack.Pop();
-                    stack.Push(AND(a, b));
-                }
-                else if (token == "|")
-                {
-                    if (stack.Count < 2) throw new Exception("Недостаточно операндов для операции |");
-                    int b = stack.Pop();
-                    int a = stack.Pop();
-                    stack.Push(OR(a, b));
-                }
-                else if (token == "^")
-                {
-                    if (stack.Count < 2) throw new Exception("Недостаточно операндов для операции ^");
-                    int b = stack.Pop();
-                    int a = stack.Pop();
-                    stack.Push(XOR(a, b));
-                }
-                else if (token == "->")
-                {
-                    if (stack.Count < 2) throw new Exception("Недостаточно операндов для операции ->");
-                    int b = stack.Pop();
-                    int a = stack.Pop();
-                    stack.Push(IMPLICATION(a, b));
-                }
-                else if (token == "=")
-                {
-                    if (stack.Count < 2) throw new Exception("Недостаточно операндов для операции =");
-                    int b = stack.Pop();
-                    int a = stack.Pop();
-                    stack.Push(EQUIVALENCE(a, b));
-                }
                 else
                 {
-                    throw new Exception($"Неизвестный токен: {token}");
+                    switch (token)
+                    {
+                        case "!": stack.Push(NOT(stack.Pop())); break;
+                        case "&": stack.Push(AND(stack.Pop(), stack.Pop())); break;
+                        case "|": stack.Push(OR(stack.Pop(), stack.Pop())); break;
+                        case "^": stack.Push(XOR(stack.Pop(), stack.Pop())); break;
+                        case "->": stack.Push(IMPLICATION(stack.Pop(), stack.Pop())); break;
+                        case "=": stack.Push(EQUIVALENCE(stack.Pop(), stack.Pop())); break;
+                        default: throw new Exception($"Неизвестный токен: {token}");
+                    }
                 }
             }
-
-            if (stack.Count != 1)
-                throw new Exception("Некорректное выражение");
-
+            if (stack.Count != 1) throw new Exception("Некорректное выражение");
             return stack.Pop();
         }
 
-        // Логические операции
         private int NOT(int a) => a == 0 ? 1 : 0;
         private int AND(int a, int b) => (a == 1 && b == 1) ? 1 : 0;
         private int OR(int a, int b) => (a == 1 || b == 1) ? 1 : 0;
@@ -619,7 +412,6 @@ namespace Lab4
         private int IMPLICATION(int a, int b) => (a == 1 && b == 0) ? 0 : 1;
         private int EQUIVALENCE(int a, int b) => (a == b) ? 1 : 0;
 
-        // Обработчик кнопки для сравнения функций
         private void CompareButton_Click(object sender, RoutedEventArgs e)
         {
             try
@@ -627,39 +419,29 @@ namespace Lab4
                 string function1 = CompareFunction1.Text.Trim();
                 string function2 = CompareFunction2.Text.Trim();
 
-                // Определяем тип функций (номер или формула)
                 bool isNumber1 = int.TryParse(function1, out int num1);
                 bool isNumber2 = int.TryParse(function2, out int num2);
 
-                List<TruthTableRow> table1, table2;
+                var allVariablesSet = new HashSet<string>();
+                if (isNumber1) for (int i = 1; i <= 3; i++) allVariablesSet.Add($"x{i}");
+                else GetVariablesFromFormula(function1).ForEach(v => allVariablesSet.Add(v));
 
-                // Получаем таблицы истинности для обеих функций
-                if (isNumber1)
-                {
-                    // Для функции по номеру нужно определить количество переменных
-                    // По умолчанию используем 3 переменные, если не указано иное
-                    int numVariables = 3;
-                    table1 = GenerateTruthTableByNumber(numVariables, num1);
-                }
-                else
-                {
-                    table1 = GenerateTruthTableByFormula(function1);
-                }
+                if (isNumber2) for (int i = 1; i <= 3; i++) allVariablesSet.Add($"x{i}");
+                else GetVariablesFromFormula(function2).ForEach(v => allVariablesSet.Add(v));
 
-                if (isNumber2)
-                {
-                    int numVariables = 3;
-                    table2 = GenerateTruthTableByNumber(numVariables, num2);
-                }
-                else
-                {
-                    table2 = GenerateTruthTableByFormula(function2);
-                }
+                var allVariables = allVariablesSet.OrderBy(v => int.Parse(v.Substring(1))).ToList();
 
-                // Сравниваем таблицы
+                // Вызываем новый метод для настройки колонок и показываем таблицу для наглядности
+                SetupDataGridColumns(allVariables);
+
+                List<TruthTableRow> table1 = isNumber1 ? GenerateTruthTableByNumber(allVariables.Count, num1, allVariables) : GenerateTruthTableByFormula(function1, allVariables);
+                List<TruthTableRow> table2 = isNumber2 ? GenerateTruthTableByNumber(allVariables.Count, num2, allVariables) : GenerateTruthTableByFormula(function2, allVariables);
+
+                // Показываем первую таблицу в DataGrid для контекста
+                TruthTableDataGrid.ItemsSource = table1;
+
                 bool areEquivalent = CompareTruthTables(table1, table2, out TruthTableRow counterExample);
 
-                // Выводим результат
                 if (areEquivalent)
                 {
                     CompareResult.Text = "Функции эквивалентны";
@@ -668,28 +450,16 @@ namespace Lab4
                 else
                 {
                     CompareResult.Text = "Функции не эквивалентны";
-
-                    // Формируем контрпример
-                    StringBuilder sb = new StringBuilder("Контрпример: ");
-
-                    if (table1.Count > 0)
+                    var sb = new StringBuilder("Контрпример: ");
+                    bool firstVar = true;
+                    foreach (var varName in allVariables)
                     {
-                        sb.Append($"x1={counterExample.X1}");
-                        if (table1[0].X2 != -1) sb.Append($", x2={counterExample.X2}");
-                        if (table1[0].X3 != -1) sb.Append($", x3={counterExample.X3}");
-
-                        sb.Append($", F1={counterExample.Result}");
-
-                        // Находим соответствующую строку во второй таблице
-                        var row2 = table2.FirstOrDefault(r =>
-                            r.X1 == counterExample.X1 &&
-                            r.X2 == counterExample.X2 &&
-                            r.X3 == counterExample.X3);
-
-                        if (row2 != null)
-                            sb.Append($", F2={row2.Result}");
+                        if (!firstVar) sb.Append(", ");
+                        sb.Append($"{varName}={counterExample.GetValue(varName)}");
+                        firstVar = false;
                     }
-
+                    var row2 = table2.FirstOrDefault(r => allVariables.All(var => r.GetValue(var) == counterExample.GetValue(var)));
+                    if (row2 != null) sb.Append($", F1={counterExample.Result}, F2={row2.Result}");
                     CounterExample.Text = sb.ToString();
                 }
             }
@@ -699,20 +469,13 @@ namespace Lab4
             }
         }
 
-        // Генерация таблицы истинности по формуле
-        private List<TruthTableRow> GenerateTruthTableByFormula(string formula)
+        private List<TruthTableRow> GenerateTruthTableByFormula(string formula, List<string> variables)
         {
-            var variables = GetVariablesFromFormula(formula);
             int numVariables = variables.Count;
-
-            if (numVariables == 0)
-            {
-                throw new Exception("В формуле нет переменных");
-            }
+            if (numVariables == 0) throw new Exception("В формуле нет переменных");
 
             var tableData = new List<TruthTableRow>();
             int numRows = (int)Math.Pow(2, numVariables);
-
             var rpn = ConvertToRPN(formula);
 
             for (int i = 0; i < numRows; i++)
@@ -720,65 +483,38 @@ namespace Lab4
                 var row = new TruthTableRow();
                 var variableValues = new Dictionary<string, int>();
 
-                // Заполняем значения переменных
                 for (int j = 0; j < numVariables; j++)
                 {
                     int bitValue = (i >> (numVariables - 1 - j)) & 1;
                     string varName = variables[j];
                     variableValues[varName] = bitValue;
-
-                    // Заполняем соответствующие поля в строке таблицы
-                    if (varName == "x1") row.X1 = bitValue;
-                    else if (varName == "x2") row.X2 = bitValue;
-                    else if (varName == "x3") row.X3 = bitValue;
-                    else if (varName == "x4") row.X4 = bitValue;
-                    else if (varName == "x5") row.X5 = bitValue;
-                    else if (varName == "x6") row.X6 = bitValue;
-                    else if (varName == "x7") row.X7 = bitValue;
-                    else if (varName == "x8") row.X8 = bitValue;
-                    else if (varName == "x9") row.X9 = bitValue;
-                    else if (varName == "x10") row.X10 = bitValue;
+                    row.SetValue(varName, bitValue);
                 }
 
-                // Вычисляем значение формулы для текущего набора переменных
                 row.Result = EvaluateRPN(rpn, variableValues);
-
                 tableData.Add(row);
             }
 
             return tableData;
         }
 
-        // Сравнение двух таблиц истинности
         private bool CompareTruthTables(List<TruthTableRow> table1, List<TruthTableRow> table2, out TruthTableRow counterExample)
         {
             counterExample = null;
-
-            if (table1.Count != table2.Count)
-                return false;
+            if (table1.Count != table2.Count) return false;
 
             for (int i = 0; i < table1.Count; i++)
             {
-                var row1 = table1[i];
-                var row2 = table2[i];
-
-                // Проверяем, что значения переменных совпадают
-                if (row1.X1 != row2.X1 || row1.X2 != row2.X2 || row1.X3 != row2.X3)
-                    return false;
-
-                // Проверяем, что результаты совпадают
-                if (row1.Result != row2.Result)
+                if (table1[i].Result != table2[i].Result)
                 {
-                    counterExample = row1;
+                    counterExample = table1[i];
                     return false;
                 }
             }
-
             return true;
         }
     }
 
-    // Класс для хранения строк таблицы (вне класса MainWindow, но внутри namespace)
     public class TruthTableRow
     {
         public int X1 { get; set; } = -1;
@@ -792,5 +528,14 @@ namespace Lab4
         public int X9 { get; set; } = -1;
         public int X10 { get; set; } = -1;
         public int Result { get; set; }
+
+        public int GetValue(string varName)
+        {
+            switch (varName) { case "x1": return X1; case "x2": return X2; case "x3": return X3; case "x4": return X4; case "x5": return X5; case "x6": return X6; case "x7": return X7; case "x8": return X8; case "x9": return X9; case "x10": return X10; default: return -1; }
+        }
+        public void SetValue(string varName, int value)
+        {
+            switch (varName) { case "x1": X1 = value; break; case "x2": X2 = value; break; case "x3": X3 = value; break; case "x4": X4 = value; break; case "x5": X5 = value; break; case "x6": X6 = value; break; case "x7": X7 = value; break; case "x8": X8 = value; break; case "x9": X9 = value; break; case "x10": X10 = value; break; }
+        }
     }
 }
