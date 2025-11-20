@@ -1,213 +1,237 @@
 ﻿<Window x:Class="Lab4.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Логические функции" Height="560" Width="850">
+        Title="Логические функции" Height="560" Width="800">
+    <Window.Background>
+        <SolidColorBrush Color="#E7E7E5"></SolidColorBrush>
+    </Window.Background>
+    <!-- Оборачиваем Canvas в Viewbox для автоматического масштабирования -->
+        <Viewbox Stretch="Uniform">
+            <Canvas Background="#E7E7E5" Width="850" Height="560">
+                <!-- Фон для табов -->
+                <Rectangle Canvas.Left="150" Canvas.Top="10" 
+                           Width="560" Height="40" 
+                           Fill="#B5BDBD" Stroke="#B2B6B5" RadiusX="4" RadiusY="4"/>
 
-    <Canvas Background="#E7E7E5">
-        <!-- Фон для табов -->
-        <Rectangle Canvas.Left="150" Canvas.Top="10" 
-                   Width="560" Height="40" 
-                   Fill="#B5BDBD" Stroke="#B2B6B5" RadiusX="4" RadiusY="4"/>
+                <!-- Контейнер табов -->
+                <StackPanel Canvas.Left="255" Canvas.Top="15" Orientation="Horizontal">
+                    <Border x:Name="Tab1" Width="100" Height="30" Background="#CA908E" 
+                            CornerRadius="3" Cursor="Hand" MouseDown="Tab1_MouseDown">
+                        <TextBlock Text="По номеру" Foreground="White" 
+                                   HorizontalAlignment="Center" VerticalAlignment="Center"
+                                   FontWeight="SemiBold"/>
+                    </Border>
 
-        <!-- Контейнер табов -->
-        <StackPanel Canvas.Left="255" Canvas.Top="15" Orientation="Horizontal">
-            <Border x:Name="Tab1" Width="100" Height="30" Background="#CA908E" 
-                    CornerRadius="3" Cursor="Hand" MouseDown="Tab1_MouseDown">
-                <TextBlock Text="По номеру" Foreground="White" 
-                           HorizontalAlignment="Center" VerticalAlignment="Center"
-                           FontWeight="SemiBold"/>
-            </Border>
+                    <Border x:Name="Tab2" Width="100" Height="30" Background="Transparent" 
+                            CornerRadius="3" Cursor="Hand" Margin="10,0,0,0" MouseDown="Tab2_MouseDown">
+                        <TextBlock Text="По формуле" Foreground="#666" 
+                                   HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
 
-            <Border x:Name="Tab2" Width="100" Height="30" Background="Transparent" 
-                    CornerRadius="3" Cursor="Hand" Margin="10,0,0,0" MouseDown="Tab2_MouseDown">
-                <TextBlock Text="По формуле" Foreground="#666" 
-                           HorizontalAlignment="Center" VerticalAlignment="Center"/>
-            </Border>
+                    <Border x:Name="Tab3" Width="100" Height="30" Background="Transparent" 
+                            CornerRadius="3" Cursor="Hand" Margin="10,0,0,0" MouseDown="Tab3_MouseDown">
+                        <TextBlock Text="Сравнение" Foreground="#666" 
+                                   HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                </StackPanel>
 
-            <Border x:Name="Tab3" Width="100" Height="30" Background="Transparent" 
-                    CornerRadius="3" Cursor="Hand" Margin="10,0,0,0" MouseDown="Tab3_MouseDown">
-                <TextBlock Text="Сравнение" Foreground="#666" 
-                           HorizontalAlignment="Center" VerticalAlignment="Center"/>
-            </Border>
-        </StackPanel>
+                <!-- === ВКЛАДКА 1: ПО НОМЕРУ === -->
+                <Border x:Name="Tab1Content" BorderBrush="Transparent" BorderThickness="0" 
+                        Background="#F1C4BE" Padding="10"
+                        CornerRadius="5"
+                        Canvas.Top="60" Canvas.Left="20"
+                        Width="350" Height="450">
 
-        <!-- === ВКЛАДКА 1: ПО НОМЕРУ === -->
-        <Border x:Name="Tab1Content" BorderBrush="Transparent" BorderThickness="0" 
-                Background="#F1C4BE" Padding="10"
-                CornerRadius="5"
-                Canvas.Top="60" Canvas.Left="20"
-                Width="350" Height="450">
-
-            <StackPanel>
-                <Label Content="Параметры для построения таблицы"
-                       FontWeight="Black" FontFamily="Calibri" FontSize="16" Margin="0,0,0,10"/>
-
-                <Rectangle Fill="#E7E7E5" Height="2" Margin="0,5"/>
-
-                <Label Content="Число переменных:" FontWeight="Black" FontFamily="Calibri" 
-                       FontSize="14" Foreground="Gray" Margin="0,10,0,0"/>
-                <TextBox x:Name="NumCountTextBox" Width="80" Height="22" Background="Transparent"
-                        BorderBrush="#CA908E" Foreground="Gray" FontWeight="Black" FontSize="14"
-                        HorizontalAlignment="Left" Margin="0,5,0,10" Text="3"/>
-
-                <Label Content="Номер функции:" FontWeight="Black" FontFamily="Calibri" 
-                       FontSize="14" Foreground="Gray"/>
-                <TextBox x:Name="FunctionName" Width="80" Height="22" Background="Transparent"
-                        BorderBrush="#CA908E" Foreground="Gray" FontWeight="Black" FontSize="14"
-                        HorizontalAlignment="Left" Margin="0,5,0,20" Text="5"/>
-
-                <Button x:Name="TableTrueFalseButton" Height="50" BorderThickness="0"
-                        Foreground="White" Background="#78AEAE" Content="Таблица истинности" 
-                        FontSize="14" FontWeight="bold" Margin="0,5" Click="TableTrueFalseButton_Click">
-                    <Button.Resources>
-                        <Style TargetType="Border">
-                            <Setter Property="CornerRadius" Value="10"/>
-                        </Style>
-                    </Button.Resources>
-                </Button>
-                
-            </StackPanel>
-        </Border>
-
-        <!-- === ВКЛАДКА 2: ПО ФОРМУЛЕ === -->
-        <Border x:Name="Tab2Content" Visibility="Collapsed"
-                BorderBrush="Transparent" BorderThickness="0" 
-                Background="#F1C4BE" Padding="10"
-                CornerRadius="5"
-                Canvas.Top="60" Canvas.Left="20"
-                Width="350" Height="450">
-
-            <StackPanel>
-                <Label Content="Ввод формулы" FontWeight="Black" FontFamily="Calibri" 
-                       FontSize="16" Margin="0,0,0,10"/>
-
-                <Rectangle Fill="#E7E7E5" Height="2" Margin="0,5"/>
-
-                <Label Content="Формула:" FontWeight="Black" FontFamily="Calibri" 
-                       FontSize="14" Foreground="Gray" Margin="0,10,0,0"/>
-                <TextBox x:Name="FormulaTextBox" Height="60" Background="Transparent"
-                        BorderBrush="#CA908E" Foreground="Gray" FontWeight="SemiBold" FontSize="12"
-                        TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Auto"
-                        Margin="0,5,0,10" Text="(x1 | x2) -> x3"/>
-
-                <TextBlock Text="Доступные операторы: ! &amp; | ^ -&gt; =" 
-                          FontSize="11" Foreground="#666" Margin="0,0,0,10"
-                          TextWrapping="Wrap"/>
-
-                <Button x:Name="TableTrueFalseButton2" Height="50" BorderThickness="0"
-                        Foreground="White" Background="#78AEAE" Content="Таблица истинности" 
-                        FontSize="14" FontWeight="bold" Margin="0,5" Click="ParseFormulaButton_Click">
-                    <Button.Resources>
-                        <Style TargetType="Border">
-                            <Setter Property="CornerRadius" Value="10"/>
-                        </Style>
-                    </Button.Resources>
-                </Button>
-            </StackPanel>
-        </Border>
-
-        <!-- === ВКЛАДКА 3: СРАВНЕНИЕ === -->
-        <Border x:Name="Tab3Content" Visibility="Collapsed"
-                BorderBrush="Transparent" BorderThickness="0" 
-                Background="#F1C4BE" Padding="10"
-                CornerRadius="5"
-                Canvas.Top="60" Canvas.Left="20"
-                Width="350" Height="450">
-
-            <StackPanel>
-                <Label Content="Сравнение функций" FontWeight="Black" FontFamily="Calibri" 
-                       FontSize="16" Margin="0,0,0,5"/>
-
-                <Rectangle Fill="#E7E7E5" Height="2" Margin="0,5"/>
-
-                <Label Content="Функция 1:" FontWeight="Black" FontFamily="Calibri" 
-                       FontSize="14" Foreground="Gray" Margin="0,3,0,0"/>
-                <TextBox x:Name="CompareFunction1" Height="40" Background="Transparent"
-                        BorderBrush="#CA908E" Foreground="Gray" FontWeight="SemiBold" FontSize="12"
-                        TextWrapping="Wrap" Margin="0,3,0,5" Text="x1 &amp; !x2 | x3"/>
-
-                <Label Content="Функция 2:" FontWeight="Black" FontFamily="Calibri" 
-                       FontSize="14" Foreground="Gray"/>
-                <TextBox x:Name="CompareFunction2" Height="40" Background="Transparent"
-                        BorderBrush="#CA908E" Foreground="Gray" FontWeight="SemiBold" FontSize="12"
-                        TextWrapping="Wrap" Margin="0,3,0,20" Text="(x1 &amp; !x2) | x3"/>
-
-                <Button x:Name="CompareButton" Height="50" BorderThickness="0"
-                        Foreground="White" Background="#78AEAE" Content="Проверить эквивалентность" 
-                        FontSize="14" FontWeight="bold" Margin="0,3" Click="CompareButton_Click">
-                    <Button.Resources>
-                        <Style TargetType="Border">
-                            <Setter Property="CornerRadius" Value="10"/>
-                        </Style>
-                    </Button.Resources>
-                </Button>
-
-                <Border Background="White" CornerRadius="5" Padding="10" Margin="0,10">
                     <StackPanel>
-                        <TextBlock x:Name="CompareResult" Text="Результат сравнения..." 
-                                  FontSize="13" FontWeight="SemiBold" Foreground="#333"/>
-                        <TextBlock x:Name="CounterExample" Text="" 
-                                  FontSize="11" Foreground="#666" Margin="0,5,0,0"/>
+                        <Label Content="Параметры для построения таблицы"
+                               FontWeight="Black" FontFamily="Calibri" FontSize="16" Margin="0,0,0,10"/>
+
+                        <Rectangle Fill="#E7E7E5" Height="2" Margin="0,5"/>
+
+                        <Label Content="Число переменных:" FontWeight="Black" FontFamily="Calibri" 
+                               FontSize="14" Foreground="Gray" Margin="0,10,0,0"/>
+                        <TextBox x:Name="NumCountTextBox" Width="80" Height="22" Background="Transparent"
+                                BorderBrush="#CA908E" Foreground="Gray" FontWeight="Black" FontSize="14"
+                                HorizontalAlignment="Left" Margin="0,5,0,10" Text="3"/>
+
+                        <Label Content="Номер функции:" FontWeight="Black" FontFamily="Calibri" 
+                               FontSize="14" Foreground="Gray"/>
+                        <TextBox x:Name="FunctionName" Width="80" Height="22" Background="Transparent"
+                                BorderBrush="#CA908E" Foreground="Gray" FontWeight="Black" FontSize="14"
+                                HorizontalAlignment="Left" Margin="0,5,0,20" Text="5"/>
+
+                        <Button x:Name="TableTrueFalseButton" Height="50" BorderThickness="0"
+                                Foreground="White" Background="#78AEAE" Content="Таблица истинности" 
+                                FontSize="14" FontWeight="bold" Margin="0,5" Click="TableTrueFalseButton_Click">
+                            <Button.Resources>
+                                <Style TargetType="Border">
+                                    <Setter Property="CornerRadius" Value="10"/>
+                                </Style>
+                            </Button.Resources>
+                        </Button>
+                        
                     </StackPanel>
                 </Border>
-            </StackPanel>
-        </Border>
 
-        <!-- Область результатов (общая для всех вкладок) -->
-      <DataGrid x:Name="TruthTableDataGrid"
-                Canvas.Left="410" Canvas.Top="90"
-                Width="380" Height="300"
-                AutoGenerateColumns="False"
-                HeadersVisibility="Column"
-                IsReadOnly="True"
-                Background="White"
-                BorderThickness="0"
-                ScrollViewer.VerticalScrollBarVisibility="Auto">
-            <DataGrid.CellStyle>
-                <Style TargetType="DataGridCell">
-                    <Setter Property="BorderBrush" Value="#E0E0E0"/>
-                    <Setter Property="BorderThickness" Value="0,0,1,1"/>
-                    <Setter Property="Padding" Value="8"/>
-                    <Setter Property="Foreground" Value="#333"/>
-                </Style>
-            </DataGrid.CellStyle>
+                <!-- === ВКЛАДКА 2: ПО ФОРМУЛЕ === -->
+                <Border x:Name="Tab2Content" Visibility="Collapsed"
+                        BorderBrush="Transparent" BorderThickness="0" 
+                        Background="#F1C4BE" Padding="10"
+                        CornerRadius="5"
+                        Canvas.Top="60" Canvas.Left="20"
+                        Width="350" Height="450">
 
-            <DataGrid.ColumnHeaderStyle>
-                <Style TargetType="DataGridColumnHeader">
-                    <Setter Property="Background" Value="#F1C4BE"/>
-                    <Setter Property="Foreground" Value="#333"/>
-                    <Setter Property="FontWeight" Value="Bold"/>
-                    <Setter Property="Padding" Value="8"/>
-                </Style>
-            </DataGrid.ColumnHeaderStyle>
-        </DataGrid>
+                    <StackPanel>
+                        <Label Content="Ввод формулы" FontWeight="Black" FontFamily="Calibri" 
+                               FontSize="16" Margin="0,0,0,10"/>
 
-        <!-- Область для СДНФ -->
-        <Border Canvas.Left="25" Canvas.Top="340" Width="340" Height="70" Background="White" CornerRadius="5" Padding="10">
-            <StackPanel>
-                <TextBlock Text="СДНФ (Дизъюнктивная нормальная форма):" FontWeight="Bold" FontSize="12" Foreground="#333"/>
-                <ScrollViewer VerticalScrollBarVisibility="Auto" Height="40">
-                    <TextBlock x:Name="DNFResultText" Text="" FontSize="11" Foreground="#666" TextWrapping="Wrap"/>
-                </ScrollViewer>
-            </StackPanel>
-        </Border>
+                        <Rectangle Fill="#E7E7E5" Height="2" Margin="0,5"/>
 
-        <!-- Область для СКНФ -->
-        <Border Canvas.Left="25" Canvas.Top="415" Width="340" Height="70" Background="White" CornerRadius="5" Padding="10">
-            <StackPanel>
-                <TextBlock Text="СКНФ (Конъюнктивная нормальная форма):" FontWeight="Bold" FontSize="12" Foreground="#333"/>
-                <ScrollViewer VerticalScrollBarVisibility="Auto" Height="40">
-                    <TextBlock x:Name="KNFResultText" Text="" FontSize="11" Foreground="#666" TextWrapping="Wrap"/>
-                </ScrollViewer>
-            </StackPanel>
-        </Border>
+                        <Label Content="Формула:" FontWeight="Black" FontFamily="Calibri" 
+                               FontSize="14" Foreground="Gray" Margin="0,10,0,0"/>
+                        <TextBox x:Name="FormulaTextBox" Height="60" Background="Transparent"
+                                BorderBrush="#CA908E" Foreground="Gray" FontWeight="SemiBold" FontSize="12"
+                                TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Auto"
+                                Margin="0,5,0,10" Text="(x1 | x2) -> x3"/>
 
-        <!-- Статистика формул -->
-        <Border Canvas.Left="400" Canvas.Top="400" Width="400" Height="40" Background="#F1C4BE" CornerRadius="5" Padding="10">
-            <StackPanel Orientation="Horizontal">
-                <TextBlock x:Name="DNFStatsText" Text="" FontSize="11" Foreground="#333" Margin="0,0,20,0"/>
-                <TextBlock x:Name="KNFStatsText" Text="" FontSize="11" Foreground="#333"/>
-            </StackPanel>
-        </Border>
-    </Canvas>
+                        <TextBlock Text="Доступные операторы: ! &amp; | ^ -&gt; =" 
+                                  FontSize="11" Foreground="#666" Margin="0,0,0,10"
+                                  TextWrapping="Wrap"/>
+
+                        <Button x:Name="TableTrueFalseButton2" Height="50" BorderThickness="0"
+                                Foreground="White" Background="#78AEAE" Content="Таблица истинности" 
+                                FontSize="14" FontWeight="bold" Margin="0,5" Click="ParseFormulaButton_Click">
+                            <Button.Resources>
+                                <Style TargetType="Border">
+                                    <Setter Property="CornerRadius" Value="10"/>
+                                </Style>
+                            </Button.Resources>
+                        </Button>
+                    </StackPanel>
+                </Border>
+
+                <!-- === ВКЛАДКА 3: СРАВНЕНИЕ === -->
+                <Border x:Name="Tab3Content" Visibility="Collapsed"
+                        BorderBrush="Transparent" BorderThickness="0" 
+                        Background="#F1C4BE" Padding="10"
+                        CornerRadius="5"
+                        Canvas.Top="60" Canvas.Left="20"
+                        Width="350" Height="450">
+
+                    <StackPanel>
+                        <Label Content="Сравнение функций" FontWeight="Black" FontFamily="Calibri" 
+                               FontSize="16" Margin="0,0,0,5"/>
+
+                        <Rectangle Fill="#E7E7E5" Height="2" Margin="0,5"/>
+
+                        <Label Content="Функция 1:" FontWeight="Black" FontFamily="Calibri" 
+                               FontSize="14" Foreground="Gray" Margin="0,3,0,0"/>
+                        <TextBox x:Name="CompareFunction1" Height="40" Background="Transparent"
+                                BorderBrush="#CA908E" Foreground="Gray" FontWeight="SemiBold" FontSize="12"
+                                TextWrapping="Wrap" Margin="0,3,0,5" Text="x1 &amp; !x2 | x3"/>
+
+                        <Label Content="Функция 2:" FontWeight="Black" FontFamily="Calibri" 
+                               FontSize="14" Foreground="Gray"/>
+                        <TextBox x:Name="CompareFunction2" Height="40" Background="Transparent"
+                                BorderBrush="#CA908E" Foreground="Gray" FontWeight="SemiBold" FontSize="12"
+                                TextWrapping="Wrap" Margin="0,3,0,20" Text="(x1 &amp; !x2) | x3"/>
+                        
+
+                        <Button x:Name="CompareButton" Height="50" BorderThickness="0"
+                                Foreground="White" Background="#78AEAE" Content="Проверить эквивалентность" 
+                                FontSize="14" FontWeight="bold" Margin="0,3" Click="CompareButton_Click">
+                            <Button.Resources>
+                                <Style TargetType="Border">
+                                    <Setter Property="CornerRadius" Value="10"/>
+                                </Style>
+                            </Button.Resources>
+                        </Button>
+                        
+                    </StackPanel>
+                </Border>
+
+                <!-- Область результатов (общая для всех вкладок) -->
+              <DataGrid x:Name="TruthTableDataGrid"
+                        Canvas.Left="410" Canvas.Top="90"
+                        Width="380" Height="300"
+                        AutoGenerateColumns="False"
+                        HeadersVisibility="Column"
+                        IsReadOnly="True"
+                        Background="White"
+                        BorderThickness="0"
+                        ScrollViewer.VerticalScrollBarVisibility="Auto">
+                    <DataGrid.CellStyle>
+                        <Style TargetType="DataGridCell">
+                            <Setter Property="BorderBrush" Value="#E0E0E0"/>
+                            <Setter Property="BorderThickness" Value="0,0,1,1"/>
+                            <Setter Property="Padding" Value="8"/>
+                            <Setter Property="Foreground" Value="#333"/>
+                        </Style>
+                    </DataGrid.CellStyle>
+
+                    <DataGrid.ColumnHeaderStyle>
+                        <Style TargetType="DataGridColumnHeader">
+                            <Setter Property="Background" Value="#F1C4BE"/>
+                            <Setter Property="Foreground" Value="#333"/>
+                            <Setter Property="FontWeight" Value="Bold"/>
+                            <Setter Property="Padding" Value="8"/>
+                        </Style>
+                    </DataGrid.ColumnHeaderStyle>
+                </DataGrid>
+
+                <!-- Область для СДНФ -->
+                <Border Canvas.Left="25" Canvas.Top="340" Width="340" Height="70" Background="White" CornerRadius="5" Padding="10">
+                    <StackPanel>
+                        <TextBlock Text="СДНФ (Дизъюнктивная нормальная форма):" FontWeight="Bold" FontSize="12" Foreground="#333"/>
+                        <ScrollViewer VerticalScrollBarVisibility="Auto" Height="40">
+                            <TextBlock x:Name="DNFResultText" Text="" FontSize="11" Foreground="#666" TextWrapping="Wrap"/>
+                        </ScrollViewer>
+                    </StackPanel>
+                </Border>
+
+                <!-- Область для СКНФ -->
+                <Border Canvas.Left="25" Canvas.Top="415" Width="340" Height="70" Background="White" CornerRadius="5" Padding="10">
+                    <StackPanel>
+                        <TextBlock Text="СКНФ (Конъюнктивная нормальная форма):" FontWeight="Bold" FontSize="12" Foreground="#333"/>
+                        <ScrollViewer VerticalScrollBarVisibility="Auto" Height="40">
+                            <TextBlock x:Name="KNFResultText" Text="" FontSize="11" Foreground="#666" TextWrapping="Wrap"/>
+                        </ScrollViewer>
+                    </StackPanel>
+                </Border>
+
+                <!-- Статистика формул -->
+                <Border Canvas.Left="400" Canvas.Top="400" Width="400" Height="40" Background="#F1C4BE" CornerRadius="5" Padding="10">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock x:Name="DNFStatsText" Text="" FontSize="11" Foreground="#333" Margin="0,0,20,0"/>
+                        <TextBlock x:Name="KNFStatsText" Text="" FontSize="11" Foreground="#333"/>
+                    </StackPanel>
+                </Border>
+                
+                <Border Canvas.Left="410" Canvas.Top="450" Width="250" Height="70" Background="White" CornerRadius="5" Padding="10">
+                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                        <StackPanel>
+                            <TextBlock x:Name="CompareResult" Text="Результат сравнения..." 
+                                       FontSize="13" FontWeight="SemiBold" Foreground="#333"/>
+                            <TextBlock x:Name="CounterExample" Text="" 
+                                       FontSize="11" Foreground="#666" Margin="0,5,0,0"
+                                       TextWrapping="Wrap"/>
+                        </StackPanel>
+                    </ScrollViewer>
+                </Border>
+                
+                
+                <Button x:Name="QuestionButton" Height="20" BorderThickness="0"
+                        Foreground="White" Background="#78AEAE" Content="?" Width="20"
+                        FontSize="14" FontWeight="bold" Click="QuestionButton_Click"
+                        Canvas.Top="450" Canvas.Left="780">
+                    <Button.Resources>
+                        <Style TargetType="Border">
+                            <Setter Property="CornerRadius" Value="10"/>
+                        </Style>
+                    </Button.Resources>
+                </Button>
+                <Label Content="Инструкция:" Canvas.Top="445" Canvas.Left="670" FontSize="14" FontWeight="Black"></Label>
+            </Canvas>
+        </Viewbox>
+
 </Window>

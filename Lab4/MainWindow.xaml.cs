@@ -25,6 +25,28 @@ namespace Lab4
             // Устанавливаем первую вкладку как активную при запуске
             ActivateTab(Tab1, Tab1Content);
         }
+        private void QuestionButton_Click(object sender, RoutedEventArgs e)
+        {
+            string instructions = 
+                "Инструкция по использованию приложения.\n\n" +
+        
+                "--- Вкладка \"Таблица по номеру\" ---\n" +
+                "1. Введите количество переменных (от 1 до 20).\n" +
+                "2. Введите номер функции в десятичной системе.\n" +
+                "3. Нажмите \"Построить\" для получения таблицы, ДНФ и КНФ.\n\n" +
+
+                "--- Вкладка \"Таблица по формуле\" ---\n" +
+                "1. Введите логическую формулу (например: !(x1 & x2) | x3).\n" +
+                "2. Используйте операторы: ! (НЕ), & (И), | (ИЛИ), ^ (XOR), -> (импликация), = (эквивалентность).\n" +
+                "3. Нажмите \"Построить\" для анализа.\n\n" +
+
+                "--- Вкладка \"Сравнение функций\" ---\n" +
+                "1. Введите две функции (номера или формулы) в соответствующие поля.\n" +
+                "2. Нажмите \"Сравнить\".\n" +
+                "3. Результат покажет, эквивалентны ли функции, или предоставит контрпример.";
+
+            MessageBox.Show(instructions, "Инструкция", MessageBoxButton.OK, MessageBoxImage.Information);
+        }
 
         private void Tab1_MouseDown(object sender, MouseButtonEventArgs e)
         {
@@ -69,6 +91,7 @@ namespace Lab4
             }
         }
 
+        // ИЗМЕНЕННЫЙ МЕТОД
         private void SetupDataGridColumns(List<string> variableNames)
         {
             // Очищаем предыдущие колонки
@@ -103,13 +126,13 @@ namespace Lab4
             // Создаем колонку для каждой переменной
             foreach (var varName in variableNames)
             {
-                // Преобразуем "x1" в "X1" для привязки к свойству класса TruthTableRow
-                string bindingPath = char.ToUpper(varName[0]) + varName.Substring(1);
+                // Создаем привязку к словарю Values по ключу, например "Values[x1]"
+                string bindingPath = $"Values[{varName}]";
 
                 var column = new DataGridTextColumn
                 {
-                    Header = varName, // Заголовок будет "x1"
-                    Binding = new Binding(bindingPath) // Привязка к свойству "X1"
+                    Header = varName,
+                    Binding = new Binding(bindingPath)
                 };
                 TruthTableDataGrid.Columns.Add(column);
             }
@@ -515,27 +538,24 @@ namespace Lab4
         }
     }
 
+    // ИЗМЕНЕННЫЙ КЛАСС
     public class TruthTableRow
     {
-        public int X1 { get; set; } = -1;
-        public int X2 { get; set; } = -1;
-        public int X3 { get; set; } = -1;
-        public int X4 { get; set; } = -1;
-        public int X5 { get; set; } = -1;
-        public int X6 { get; set; } = -1;
-        public int X7 { get; set; } = -1;
-        public int X8 { get; set; } = -1;
-        public int X9 { get; set; } = -1;
-        public int X10 { get; set; } = -1;
+        // Используем словарь для хранения значений переменных
+        public Dictionary<string, int> Values { get; set; } = new Dictionary<string, int>();
         public int Result { get; set; }
 
         public int GetValue(string varName)
         {
-            switch (varName) { case "x1": return X1; case "x2": return X2; case "x3": return X3; case "x4": return X4; case "x5": return X5; case "x6": return X6; case "x7": return X7; case "x8": return X8; case "x9": return X9; case "x10": return X10; default: return -1; }
+            // Просто возвращаем значение из словаря
+            return Values.TryGetValue(varName, out int val) ? val : -1;
         }
+
         public void SetValue(string varName, int value)
         {
-            switch (varName) { case "x1": X1 = value; break; case "x2": X2 = value; break; case "x3": X3 = value; break; case "x4": X4 = value; break; case "x5": X5 = value; break; case "x6": X6 = value; break; case "x7": X7 = value; break; case "x8": X8 = value; break; case "x9": X9 = value; break; case "x10": X10 = value; break; }
+            // Просто устанавливаем значение в словаре
+            Values[varName] = value;
         }
+        
     }
 }
