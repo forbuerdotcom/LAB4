@@ -58,7 +58,7 @@
                                FontSize="14" Foreground="Gray"/>
                         <TextBox x:Name="FunctionName" Width="80" Height="22" Background="Transparent"
                                 BorderBrush="#CA908E" Foreground="Gray" FontWeight="Black" FontSize="14"
-                                HorizontalAlignment="Left" Margin="0,5,0,20" Text="5"/>
+                                HorizontalAlignment="Left" Margin="0,5,0,20" Text="11"/>
 
                         <Button x:Name="TableTrueFalseButton" Height="50" BorderThickness="0"
                                 Foreground="White" Background="#78AEAE" Content="Таблица истинности" 

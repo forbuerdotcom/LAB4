@@ -3,16 +3,16 @@
   "WorkspaceRootPath": "C:\\Users\\\u041D\u0435\u0439\u0442\u0440\u043E\u043D\\Documents\\GitHub\\LAB4\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{97C81DA1-2402-4B56-8E30-16F684D85E3F}|Lab4\\Lab4.csproj|c:\\users\\\u043D\u0435\u0439\u0442\u0440\u043E\u043D\\documents\\github\\lab4\\lab4\\mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{97C81DA1-2402-4B56-8E30-16F684D85E3F}|Lab4\\Lab4.csproj|solutionrelative:lab4\\mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{F2C15208-8E09-41F8-A1EC-AC35AD7D0B81}|LibLab4\\LibLab4.csproj|c:\\users\\\u043D\u0435\u0439\u0442\u0440\u043E\u043D\\documents\\github\\lab4\\liblab4\\liblab4.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{F2C15208-8E09-41F8-A1EC-AC35AD7D0B81}|LibLab4\\LibLab4.csproj|solutionrelative:liblab4\\liblab4.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{D032ED9B-0293-4D4D-9EEA-1302918EF80E}|TestProject1\\TestProject1.csproj|c:\\users\\\u043D\u0435\u0439\u0442\u0440\u043E\u043D\\documents\\github\\lab4\\testproject1\\unittest1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{D032ED9B-0293-4D4D-9EEA-1302918EF80E}|TestProject1\\TestProject1.csproj|solutionrelative:testproject1\\unittest1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{97C81DA1-2402-4B56-8E30-16F684D85E3F}|Lab4\\Lab4.csproj|c:\\users\\\u043D\u0435\u0439\u0442\u0440\u043E\u043D\\documents\\github\\lab4\\lab4\\mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{97C81DA1-2402-4B56-8E30-16F684D85E3F}|Lab4\\Lab4.csproj|solutionrelative:lab4\\mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{97C81DA1-2402-4B56-8E30-16F684D85E3F}|Lab4\\Lab4.csproj|c:\\users\\\u043D\u0435\u0439\u0442\u0440\u043E\u043D\\documents\\github\\lab4\\lab4\\mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
@@ -26,7 +26,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 5,
+          "SelectedChildIndex": 7,
           "Children": [
             {
               "$type": "Bookmark",
@@ -46,7 +46,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 2,
               "Title": "UnitTest1.cs",
               "DocumentMoniker": "C:\\Users\\\u041D\u0435\u0439\u0442\u0440\u043E\u043D\\Documents\\GitHub\\LAB4\\TestProject1\\UnitTest1.cs",
               "RelativeDocumentMoniker": "TestProject1\\UnitTest1.cs",
@@ -54,18 +54,17 @@
               "RelativeToolTip": "TestProject1\\UnitTest1.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABkBAABYAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-20T18:20:55.651Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-11-20T18:20:55.651Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 1,
               "Title": "LibLab4.cs",
               "DocumentMoniker": "C:\\Users\\\u041D\u0435\u0439\u0442\u0440\u043E\u043D\\Documents\\GitHub\\LAB4\\LibLab4\\LibLab4.cs",
               "RelativeDocumentMoniker": "LibLab4\\LibLab4.cs",
               "ToolTip": "C:\\Users\\\u041D\u0435\u0439\u0442\u0440\u043E\u043D\\Documents\\GitHub\\LAB4\\LibLab4\\LibLab4.cs",
               "RelativeToolTip": "LibLab4\\LibLab4.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAABEAAAAAAAAAA==",
+              "ViewState": "AgIAANMBAAAAAAAAAAAAwPEBAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-11-20T17:44:35.126Z",
               "EditorCaption": ""
@@ -79,18 +78,17 @@
               "ToolTip": "C:\\Users\\\u041D\u0435\u0439\u0442\u0440\u043E\u043D\\Documents\\GitHub\\LAB4\\Lab4\\MainWindow.xaml",
               "RelativeToolTip": "Lab4\\MainWindow.xaml",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2025-11-19T09:38:03.429Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-11-19T09:38:03.429Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 0,
               "Title": "MainWindow.xaml.cs",
               "DocumentMoniker": "C:\\Users\\\u041D\u0435\u0439\u0442\u0440\u043E\u043D\\Documents\\GitHub\\LAB4\\Lab4\\MainWindow.xaml.cs",
               "RelativeDocumentMoniker": "Lab4\\MainWindow.xaml.cs",
               "ToolTip": "C:\\Users\\\u041D\u0435\u0439\u0442\u0440\u043E\u043D\\Documents\\GitHub\\LAB4\\Lab4\\MainWindow.xaml.cs",
               "RelativeToolTip": "Lab4\\MainWindow.xaml.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAATAAAAAAAAAA==",
+              "ViewState": "AgIAABIAAAAAAAAAAAAAACYAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-11-19T09:37:19.652Z",
               "EditorCaption": ""
